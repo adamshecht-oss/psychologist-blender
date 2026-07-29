@@ -1009,7 +1009,7 @@ function AddThinkerSearch({ onAdd, T }) {
   const search = async () => {
     if (!q.trim()) return; setLoading(true);
     try {
-      const res = await fetch("/api/chat", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:400, messages:[{ role:"user", content:`Find psychologists, philosophers, or thinkers matching: "${q}". Return JSON array ≤4: [{name,domain,years,description}]. JSON only.` }] }) });
+      const res = await fetch("/api/chat", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ model:"claude-sonnet-4-5", max_tokens:400, messages:[{ role:"user", content:`Find psychologists, philosophers, or thinkers matching: "${q}". Return JSON array ≤4: [{name,domain,years,description}]. JSON only.` }] }) });
       const d = await res.json(); const raw = d.content?.map(c=>c.text||"").join("")||"[]";
       setResults(JSON.parse(raw.replace(/```json|```/g,"").trim()));
     } catch { setResults([{ name:q, domain:"Thinker", years:"", description:"" }]); }
@@ -1101,7 +1101,7 @@ export default function PsychologistBlender() {
     const thinkerNames = selected.map(id=>allThinkers.find(x=>x.id===id)?.name||id);
     const prompt = buildPrompt(question.trim(), thinkerNames, isBlend, library);
     try {
-      const res  = await fetch("/api/chat", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ model:"claude-sonnet-4-20250514", max_tokens:1200, messages:[{role:"user",content:prompt}] }) });
+      const res  = await fetch("/api/chat", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ model:"claude-sonnet-4-5", max_tokens:1200, messages:[{role:"user",content:prompt}] }) });
       const d    = await res.json();
       const raw  = d.content?.map(c=>c.text||"").join("")||"{}";
       const data = JSON.parse(raw.replace(/```json|```/g,"").trim());
